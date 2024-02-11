@@ -26,7 +26,7 @@ function Checkut() {
             </div>
             <p className='modal-actions'>
            <Button textOnly>Close</Button>
-           <Button textOnly>Submit Order</Button>
+           <Button>Submit Order</Button>
             </p>
         </form>
     </Modal>
