@@ -5,11 +5,21 @@ import { currencyFormatter } from '../util/formatting';
 import Input from './UI/Input';
 import Button from './UI/Button';
 import UserProgressContext from '../store/UserProgressContext';
+import useHttp from '../hooks/useHttp';
+
+const configInitial  = {
+  method:'POST',
+  headers: {
+        'Content-Type': 'application/json'
+      }
+}
 
 function Checkout() {
   const {items} =  useContext(CartContext);
 
   const{hideCheckout,progress} = useContext(UserProgressContext);
+
+  const {data ,isLoading,error,sendRequest} = useHttp("http://localhost:3000/orders",configInitial);
 
  const cartTotal = items.reduce((total,item)=>{
   return  total = total+item.quantity*item.price;
@@ -25,20 +35,12 @@ function Checkout() {
     const fd = new FormData(event.target);
     const customerData = Object.fromEntries(fd.entries());
 
-
-    fetch('http://localhost:3000/orders', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
+    sendRequest(JSON.stringify({
         order: {
           items:items,
           customer: customerData
         }
-      })
-    });
-
+      }));
  }
 
 
