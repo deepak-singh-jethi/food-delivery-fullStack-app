@@ -26,6 +26,20 @@ function Checkout() {
     const fd = new FormData(event.target);
     const customerData = Object.fromEntries(fd.entries());
 
+
+    fetch('http://localhost:3000/orders', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        order: {
+          items:items,
+          customer: customerData
+        }
+      })
+    });
+
  }
 
 
