@@ -19,7 +19,6 @@ function Checkout() {
   hideCheckout();
  }
 
-
  function handleSubmit(event){
 
     event.preventDefault();
@@ -44,7 +43,7 @@ function Checkout() {
 
 
   return (
-    <Modal  open = {progress ==='checkout'}>
+    <Modal  open = {progress ==='checkout'} onClose ={handleHideCheckout}>
         <form onSubmit = {handleSubmit}>
             <h2>Checkout</h2>
             <p>Total Amount: {currencyFormatter.format(cartTotal)}</p>
