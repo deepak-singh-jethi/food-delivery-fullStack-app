@@ -16,6 +16,13 @@ export default function useHttp(url, config, initialData) {
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
+  function cleardata() {
+    setData(initialData);
+    setError(null);
+    setIsLoading(false);
+    return;
+  }
+
   const sendRequest = useCallback(
     async function sendRequest(data) {
       setIsLoading(true);
@@ -41,5 +48,6 @@ export default function useHttp(url, config, initialData) {
     error,
     isLoading,
     sendRequest,
+    cleardata,
   };
 }

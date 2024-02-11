@@ -6,6 +6,7 @@ import Input from './UI/Input';
 import Button from './UI/Button';
 import UserProgressContext from '../store/UserProgressContext';
 import useHttp from '../hooks/useHttp';
+import Error from '../component/Error'
 
 const configInitial  = {
   method:'POST',
@@ -15,11 +16,11 @@ const configInitial  = {
 }
 
 function Checkout() {
-  const {items} =  useContext(CartContext);
+  const {items,clearCart} =  useContext(CartContext);
 
   const{hideCheckout,progress} = useContext(UserProgressContext);
 
-  const {data ,isLoading,error,sendRequest} = useHttp("http://localhost:3000/orders",configInitial);
+  const {data ,isLoading:isSending,error,sendRequest,cleardata} = useHttp("http://localhost:3000/orders",configInitial);
 
  const cartTotal = items.reduce((total,item)=>{
   return  total = total+item.quantity*item.price;
@@ -27,6 +28,13 @@ function Checkout() {
 
  function handleHideCheckout(){
   hideCheckout();
+ }
+
+ function handleFinish(){
+  hideCheckout();
+  clearCart();
+  cleardata()
+
  }
 
  function handleSubmit(event){
@@ -43,6 +51,28 @@ function Checkout() {
       }));
  }
 
+ let actions  = ( <><Button type = "button" textOnly onClick = {handleHideCheckout} >Close</Button>
+           <Button>Submit Order</Button></> )
+
+if(isSending){
+            actions = <p>Sending Order Data...</p>
+}
+
+if(data && !error){
+  return <Modal open={progress === 'checkout'} onClose={handleHideCheckout}>
+    <h2>Success!!</h2>
+    <p>Order Submitted successfully</p>
+    <p>We will get back to you with more Details on given contact details within few minutes</p>
+
+    <p className='modal-actions'>
+     <Button onClick = {handleFinish}>Okay</Button>
+    </p>  
+
+
+
+  </Modal>
+}
+
 
   return (
     <Modal  open = {progress ==='checkout'} onClose ={handleHideCheckout}>
@@ -56,9 +86,10 @@ function Checkout() {
               <Input label= "Postal Code" type = "text" id="postal-code"/>
               <Input label= "City" type = "text" id= "city"/>
             </div>
+
+            {error && <Error title = "Failed to submit order" msg = {error}></Error>}
             <p className='modal-actions'>
-           <Button type = "button" textOnly onClick = {handleHideCheckout} >Close</Button>
-           <Button>Submit Order</Button>
+              {actions}
             </p>
         </form>
     </Modal>
