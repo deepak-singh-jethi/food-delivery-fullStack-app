@@ -226,7 +226,7 @@ h1 {
   cursor: pointer;
   background-color: transparent;
   border: none;
-  color: #ffc404;
+  color: #ffc505;
 }
 
 .text-button:hover,
@@ -253,6 +253,16 @@ h1 {
   width: 100%;
   text-align: center;
 }
+
+.error{
+   background-color: #ffc505;
+   color: red;
+   width: 60%;
+   margin-inline: auto;
+   padding: 10px 12px;
+   border-radius: 10px;
+   text-align: center;
+  };
 
 @keyframes fade-slide-up {
   from {
